@@ -1,0 +1,7 @@
+{
+  "dependencies": [
+    "boost-static-string",
+    "fmt",
+    "ms-gsl"
+  ]
+}

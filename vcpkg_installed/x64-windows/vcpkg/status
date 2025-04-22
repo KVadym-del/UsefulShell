@@ -1,0 +1,174 @@
+Package: vcpkg-cmake-config
+Version: 2024-05-23
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 1f71ca0ccdc6c76d5d643ec0bb7ed2b05cfdc0595f3cd7063bf241cccefb181d
+Status: install ok installed
+
+Package: vcpkg-cmake
+Version: 2024-04-23
+Architecture: x64-windows
+Multi-Arch: same
+Abi: f3474e9b5a2a6e5a9868095f5128d88af00e66729f2798d41c23642e95648349
+Status: install ok installed
+
+Package: fmt
+Version: 11.0.2
+Port-Version: 1
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: ee37390d4a86f7b0a1e9fa471706a7b46e94b7b421d89d131df4aea380699495
+Description: {fmt} is an open-source formatting library providing a fast and safe alternative to C stdio and C++ iostreams.
+Status: install ok installed
+
+Package: vcpkg-boost
+Version: 2024-05-15
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 9b4bb605a159301bc221fc72c5f85019e7b0848facf8cc49d467467e204fdc19
+Status: install ok installed
+
+Package: boost-uninstall
+Version: 1.86.0
+Architecture: x64-windows
+Multi-Arch: same
+Abi: fd79d12767743ec812cf36898eb90aa9cf396f77b1f73df182ad3e7cfa44dd84
+Description: Internal vcpkg port used to uninstall Boost
+Status: install ok installed
+
+Package: boost-cmake
+Version: 1.86.0
+Depends: boost-uninstall, vcpkg-boost, vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 98ce963b3a7b51d7ce3a282cdc3009c7c11d8268b0ddad711fc05aa84e78535a
+Description: Boost CMake support infrastructure
+Status: install ok installed
+
+Package: boost-headers
+Version: 1.86.0
+Depends: boost-cmake
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 9de0202ed45e57c36ca5c03053bacaf0e054a4746f0808b1000f23e9e3dc3621
+Description: Boost headers module
+Status: install ok installed
+
+Package: boost-config
+Version: 1.86.0
+Depends: boost-cmake, boost-headers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: a87be1686639ba0ce36fbb0ff311c3cb1289cab1cf156adfcbccc72065a7d71c
+Description: Boost config module
+Status: install ok installed
+
+Package: boost-static-assert
+Version: 1.86.0
+Depends: boost-cmake, boost-config, boost-headers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: ee62fb202dd9e2115bf6644fa49e2b8e89b11642248667e133468e29a295a9a7
+Description: Boost static_assert module
+Status: install ok installed
+
+Package: boost-type-traits
+Version: 1.86.0
+Depends: boost-cmake, boost-config, boost-headers, boost-static-assert
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 86a41c46e3f0352d5ebfd8e10f0dd1e12c65d94f3d22840b8231523e936eb8bc
+Description: Boost type_traits module
+Status: install ok installed
+
+Package: boost-assert
+Version: 1.86.0
+Depends: boost-cmake, boost-config, boost-headers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: cef588054578953a460e9f09f8258862379851c70ce00ae3ab4fb3297469b957
+Description: Boost assert module
+Status: install ok installed
+
+Package: boost-throw-exception
+Version: 1.86.0
+Depends: boost-assert, boost-cmake, boost-config, boost-headers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 329de0549040a08825ec4bbadc8c01413e2f49c63d3f07141b626e39f32faea3
+Description: Boost throw_exception module
+Status: install ok installed
+
+Package: boost-preprocessor
+Version: 1.86.0
+Depends: boost-cmake, boost-config, boost-headers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: d0c0b62d198c198fcd1fcca0147bed4e6768d0d9d7c57f5a7893b0b22b1e5a07
+Description: Boost preprocessor module
+Status: install ok installed
+
+Package: boost-io
+Version: 1.86.0
+Depends: boost-cmake, boost-config, boost-headers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: e64d64afd06a8a5fb7c126c5922d95314ceeab75ade32ffef695d061574f6deb
+Description: Boost io module
+Status: install ok installed
+
+Package: boost-core
+Version: 1.86.0
+Depends: boost-assert, boost-cmake, boost-config, boost-headers, boost-static-assert, boost-throw-exception
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 2081f677f686b1997ebcc04c46f79af95ee63a4c9cc88ed75fe5254e22df8e18
+Description: Boost core module
+Status: install ok installed
+
+Package: boost-utility
+Version: 1.86.0
+Depends: boost-assert, boost-cmake, boost-config, boost-core, boost-headers, boost-io, boost-preprocessor, boost-throw-exception, boost-type-traits
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 49bcce428ff3bbd7100aae0918492af6c939bb8a2e71cf0ff3cf01a58c4c105a
+Description: Boost utility module
+Status: install ok installed
+
+Package: boost-mp11
+Version: 1.86.0
+Depends: boost-cmake, boost-config, boost-headers
+Architecture: x64-windows
+Multi-Arch: same
+Abi: d5434c3ccaaff26bfef7baee5574dfcc1276b2d9bf56e163abe6a5fa05f1b1fb
+Description: Boost mp11 module
+Status: install ok installed
+
+Package: boost-describe
+Version: 1.86.0
+Depends: boost-cmake, boost-config, boost-headers, boost-mp11
+Architecture: x64-windows
+Multi-Arch: same
+Abi: d9326b5131d2418f7f6b01204d0c28f76c980e6b0268538d87e1d91ef4769bab
+Description: Boost describe module
+Status: install ok installed
+
+Package: boost-container-hash
+Version: 1.86.0
+Depends: boost-cmake, boost-config, boost-describe, boost-headers, boost-mp11
+Architecture: x64-windows
+Multi-Arch: same
+Abi: b0e7773eba746beed40a2a86d7e6a8c97681ca50dae22bfb22ea56ce98eed200
+Description: Boost container_hash module
+Status: install ok installed
+
+Package: boost-static-string
+Version: 1.86.0
+Depends: boost-assert, boost-cmake, boost-config, boost-container-hash, boost-core, boost-headers, boost-static-assert, boost-throw-exception, boost-utility
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 55f7b03cc2c11b12d1093c087afd0c4d680e5aaceb98f486e58524deb253fe0f
+Description: Boost static_string module
+Status: install ok installed
+
