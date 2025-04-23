@@ -34,10 +34,6 @@ jobs:
       with:
         vcpkgJsonGlob: '**/vcpkg.json'
 
-    # Step 3: Print vcpkg outputs (debugging)
-    - name: Print vcpkg outputs
-      run: echo "Vcpkg Root: '${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}', Triplet: '${{ steps.runvcpkg.outputs.RUNVCPKG_DEFAULT_TRIPLET_OUT }}'"
-
     # Step 4: Add MSBuild to PATH
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
