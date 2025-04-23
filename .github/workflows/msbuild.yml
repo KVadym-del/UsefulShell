@@ -1,4 +1,4 @@
-# This workflow uses actions to build the project using MSBuild and vcpkg for package management.
+# This workflow uses MSBuild and vcpkg to build the project and install dependencies.
 
 name: MSBuild
 
@@ -18,48 +18,34 @@ permissions:
 
 jobs:
   build:
-    name: ${{ matrix.os }}-${{ github.workflow }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [windows-latest]
+    runs-on: windows-latest
 
     steps:
     # Step 1: Checkout repository and initialize submodules
-    - uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
       with:
         submodules: true
 
-    # Step 2: Setup CMake
-    - uses: lukka/get-cmake@latest
-
-    # Step 3: Directory listing (for debugging)
-    - name: List $RUNNER_WORKSPACE before vcpkg setup
-      run: find $RUNNER_WORKSPACE
-      shell: bash
-
-    # Step 4: Setup vcpkg and install dependencies from vcpkg.json
+    # Step 2: Setup vcpkg and install dependencies from vcpkg.json
     - name: Setup vcpkg
       uses: lukka/run-vcpkg@v11
       id: runvcpkg
       with:
         vcpkgJsonGlob: '**/vcpkg.json'
 
-    # Step 5: Print vcpkg outputs
-    - name: Prints output of run-vcpkg's action
-      run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_DEFAULT_TRIPLET_OUT }}' "
+    # Step 3: Print vcpkg outputs (debugging)
+    - name: Print vcpkg outputs
+      run: echo "Vcpkg Root: '${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}', Triplet: '${{ steps.runvcpkg.outputs.RUNVCPKG_DEFAULT_TRIPLET_OUT }}'"
 
-    # Step 6: Build using MSBuild
-    - name: Run CMake+MSBuild
-      uses: lukka/run-cmake@v10
-      if: contains(matrix.os, 'windows')
-      with:
-        cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
-        configurePreset: 'msbuild-vcpkg'
-        buildPreset: 'msbuild-vcpkg'
+    # Step 4: Add MSBuild to PATH
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.2
 
-    # Step 7: Directory listing after build (for debugging)
-    - name: List $RUNNER_WORKSPACE after build
-      run: find $RUNNER_WORKSPACE
-      shell: bash
+    # Step 5: Restore NuGet packages
+    - name: Restore NuGet packages
+      run: nuget restore UsefulShell.sln
+
+    # Step 6: Build with MSBuild
+    - name: Build with MSBuild
+      run: msbuild UsefulShell.sln /m /p:Configuration=${{ env.BUILD_CONFIGURATION }} /p:VcpkgRoot=${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}
