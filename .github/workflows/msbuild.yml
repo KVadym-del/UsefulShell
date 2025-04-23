@@ -1,3 +1,5 @@
+# This workflow uses actions to build the project using MSBuild and vcpkg for package management.
+
 name: MSBuild
 
 on:
@@ -5,9 +7,10 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+  workflow_dispatch:
 
 env:
-  SOLUTION_FILE_PATH: .
+  # Configuration type to build.
   BUILD_CONFIGURATION: Release
 
 permissions:
@@ -15,24 +18,48 @@ permissions:
 
 jobs:
   build:
-    runs-on: windows-latest
+    name: ${{ matrix.os }}-${{ github.workflow }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest]
 
     steps:
-    - uses: actions/checkout@v4
+    # Step 1: Checkout repository and initialize submodules
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
 
-    - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.2
+    # Step 2: Setup CMake
+    - uses: lukka/get-cmake@latest
 
+    # Step 3: Directory listing (for debugging)
+    - name: List $RUNNER_WORKSPACE before vcpkg setup
+      run: find $RUNNER_WORKSPACE
+      shell: bash
+
+    # Step 4: Setup vcpkg and install dependencies from vcpkg.json
     - name: Setup vcpkg
       uses: lukka/run-vcpkg@v11
+      id: runvcpkg
       with:
-        vcpkgGitCommitId: 2025.04.09
-        vcpkgJsonGlob: "**/vcpkg.json"
+        vcpkgJsonGlob: '**/vcpkg.json'
 
-    - name: Restore NuGet packages
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
+    # Step 5: Print vcpkg outputs
+    - name: Prints output of run-vcpkg's action
+      run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_DEFAULT_TRIPLET_OUT }}' "
 
-    - name: Build
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
+    # Step 6: Build using MSBuild
+    - name: Run CMake+MSBuild
+      uses: lukka/run-cmake@v10
+      if: contains(matrix.os, 'windows')
+      with:
+        cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
+        configurePreset: 'msbuild-vcpkg'
+        buildPreset: 'msbuild-vcpkg'
+
+    # Step 7: Directory listing after build (for debugging)
+    - name: List $RUNNER_WORKSPACE after build
+      run: find $RUNNER_WORKSPACE
+      shell: bash
